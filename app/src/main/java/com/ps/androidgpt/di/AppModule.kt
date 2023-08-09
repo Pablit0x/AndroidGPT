@@ -1,8 +1,8 @@
 package com.ps.androidgpt.di
 
-import com.ps.androidgpt.data.ChatGPTService
-import com.ps.androidgpt.data.repository.GptRepositoryImpl
-import com.ps.androidgpt.domain.repository.GptRepository
+import com.ps.androidgpt.data.ChatApi
+import com.ps.androidgpt.data.repository.ChatRepositoryImpl
+import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -17,18 +17,18 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideChatGptApi() : ChatGPTService {
+    fun provideChatGptApi() : ChatApi {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ChatGPTService::class.java)
+            .create(ChatApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideGptRepository(chatGptApi: ChatGPTService) : GptRepository {
-        return GptRepositoryImpl(chatGptApi)
+    fun provideGptRepository(chatApi: ChatApi) : ChatRepository {
+        return ChatRepositoryImpl(chatApi = chatApi)
     }
 
 }

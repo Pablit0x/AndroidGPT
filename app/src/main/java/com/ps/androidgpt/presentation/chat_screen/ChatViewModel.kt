@@ -1,93 +1,68 @@
 package com.ps.androidgpt.presentation.chat_screen
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
-import com.ps.androidgpt.domain.repository.GptRepository
+import com.ps.androidgpt.domain.model.ChatMessage
+import com.ps.androidgpt.domain.model.ChatRequest
+import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.utils.Constants
+import com.ps.androidgpt.utils.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val chatRepository: GptRepository
+    private val chatRepository: ChatRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow("")
+    private val _state = MutableStateFlow(ChatState())
     val state = _state.asStateFlow()
+    fun getChatGPTResponse(request: String) {
 
-//    val request = ChatGPTRequest(
-//        messages = listOf(
-//            Message(role = "system", content = "You are a helpful assistant."),
-//            Message(role = "user", content = "Tell me a joke.")
-//        )
-//    )
-
-    fun getChatGPTResponse() {
+        _state.update {
+            it.copy(
+                response = null, isLoading = true
+            )
+        }
 
         viewModelScope.launch {
             val chatRequest = ChatRequest(
-                model = "gpt-3.5-turbo",
-                messages = listOf(ChatMessage(role = "user", content = "Say this is a test!"))
+                model = Constants.MODEL_ID,
+                messages = listOf(ChatMessage(role = Constants.CHAT_ROLE, content = request))
             )
-
             try {
                 val response = chatRepository.getChatCompletion(chatRequest)
                 if (response.isSuccessful) {
-                    val chatResponse = response.body()
-                    Log.d("lolipop", "response + $chatResponse")
-                    // Handle the response
+                    val chatResponse = response.body()?.choices?.first()
+                    Log.d(TAG, " body = ${chatResponse?.message?.content}")
+                    _state.update {
+                        it.copy(
+                            response = chatResponse?.message?.content
+                        )
+                    }
                 } else {
-                    Log.e("lolipop", "response + ${response.errorBody()?.string()}")
-
-                    // Handle error
+                    _state.update {
+                        it.copy(
+                            response = response.errorBody()?.string()
+                        )
+                    }
+                    Log.e(TAG, "error body = ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                Log.e("lolipop", "error + ${e.message}")
-                // Handle exception
+                Log.e(TAG, "exception = ${e.message}")
+            } finally {
+                _state.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
             }
         }
     }
 }
 
-
-data class ChatChoice(
-    val message: ChatMessage,
-    @SerializedName("finish_reason") val finishReason: String,
-    val index: Int
-)
-
-data class ChatCompletion(
-    val id: String,
-    @SerializedName("object") val apiObject: String,
-    val created: Long,
-    val model: Model,
-    val choices: List<ChatChoice>
-)
-
-data class Model(
-    val id: String
-)
-
-
-data class ChatMessage(
-    val role: String,
-    val content: String
-)
-
-data class ChatRequest(
-    val model: String,
-    val messages: List<ChatMessage>
-)

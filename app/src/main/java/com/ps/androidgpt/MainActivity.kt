@@ -2,6 +2,7 @@ package com.ps.androidgpt
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ps.androidgpt.presentation.chat_screen.ChatViewModel
@@ -25,7 +27,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidGPTTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -33,11 +34,16 @@ class MainActivity : ComponentActivity() {
                     val viewModel = hiltViewModel<ChatViewModel>()
                     val state by viewModel.state.collectAsState()
 
-                    Button(onClick = { viewModel.getChatGPTResponse() }){
+                    Button(
+                        modifier = Modifier.fillMaxSize(0.2f),
+                        onClick = { viewModel.getChatGPTResponse("Tell me joke!") }){
                         Text("Tell me joke!")
                     }
 
-                    Log.d("lolipop", state)
+                    state.response?.let {
+                        Log.d("LOLIPOP", it)
+                    }
+
                 }
             }
         }

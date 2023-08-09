@@ -1,9 +1,9 @@
 package com.ps.androidgpt.domain.repository
 
-import com.ps.androidgpt.presentation.chat_screen.ChatCompletion
-import com.ps.androidgpt.presentation.chat_screen.ChatRequest
+import com.ps.androidgpt.domain.model.ChatCompletion
+import com.ps.androidgpt.domain.model.ChatRequest
 import retrofit2.Response
 
-interface GptRepository {
+interface ChatRepository {
     suspend fun getChatCompletion(request: ChatRequest): Response<ChatCompletion>
 }
