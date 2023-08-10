@@ -22,11 +22,11 @@ class ChatViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ChatState())
     val state = _state.asStateFlow()
-    fun getChatGPTResponse(request: String) {
+    fun getChatResponse(request: String) {
 
         _state.update {
             it.copy(
-                response = null, isLoading = true
+                isLoading = true
             )
         }
 
@@ -40,17 +40,14 @@ class ChatViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     val chatResponse = response.body()?.choices?.first()
                     Log.d(TAG, " body = ${chatResponse?.message?.content}")
-                    _state.update {
-                        it.copy(
-                            response = chatResponse?.message?.content
-                        )
+                    if(chatResponse != null){
+                        _state.update {
+                            it.copy(
+                                response = it.response + chatResponse.message.content
+                            )
+                        }
                     }
                 } else {
-                    _state.update {
-                        it.copy(
-                            response = response.errorBody()?.string()
-                        )
-                    }
                     Log.e(TAG, "error body = ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {

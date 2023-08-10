@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidGPT</string>
+    <string name="enter_text">Enter text…</string>
 </resources>
