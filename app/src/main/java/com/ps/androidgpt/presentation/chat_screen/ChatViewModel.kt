@@ -22,10 +22,11 @@ class ChatViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ChatState())
     val state = _state.asStateFlow()
-    fun getChatResponse(request: String) {
+    fun getChatResponse(query: String) {
 
         _state.update {
             it.copy(
+                queries = it.queries + query,
                 isLoading = true
             )
         }
@@ -33,7 +34,7 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             val chatRequest = ChatRequest(
                 model = Constants.MODEL_ID,
-                messages = listOf(ChatMessage(role = Constants.CHAT_ROLE, content = request))
+                messages = listOf(ChatMessage(role = Constants.CHAT_ROLE, content = query))
             )
             try {
                 val response = chatRepository.getChatCompletion(chatRequest)

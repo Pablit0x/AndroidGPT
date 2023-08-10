@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AndroidGPT</string>
     <string name="enter_text">Enter text…</string>
+    <string name="copied_to_clipboard">String copied to clipboard. You can now paste it wherever you need.</string>
 </resources>
