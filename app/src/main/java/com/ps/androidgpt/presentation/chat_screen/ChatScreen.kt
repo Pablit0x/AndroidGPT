@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -133,7 +134,8 @@ fun ChatScreen(
                 verticalArrangement = Arrangement.Center
             ) {
 
-                TextField(
+                OutlinedTextField(
+                    shape = RoundedCornerShape(40),
                     value = chatQuery,
                     onValueChange = { chatQuery = it },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -157,8 +159,8 @@ fun ChatScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                         .height(64.dp)
+                        .clip(RoundedCornerShape(40))
                         .gradientSurface()
-                        .clip(RoundedCornerShape(20))
                 )
             }
         }
