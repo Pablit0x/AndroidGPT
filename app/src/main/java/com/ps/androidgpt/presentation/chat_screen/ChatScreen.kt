@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,11 +49,14 @@ import androidx.compose.ui.unit.sp
 import com.ps.androidgpt.R
 import com.ps.androidgpt.presentation.composables.ResponseItem
 import com.ps.androidgpt.presentation.composables.gradientSurface
+import com.ps.androidgpt.presentation.model.ChatEntryUI
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
-    state: ChatState, onSendRequest: (String) -> Unit
+    state: ChatState,
+    onSendRequest: (String) -> Unit,
+    onSaveEntry: (ChatEntryUI) -> Unit,
 ) {
 
     var chatQuery by rememberSaveable {
@@ -66,7 +69,7 @@ fun ChatScreen(
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    LaunchedEffect(state.response, state.isLoading) {
+    LaunchedEffect(state) {
         lazyColumnListState.animateScrollBy(1000f)
     }
 
@@ -104,13 +107,15 @@ fun ChatScreen(
                 state = lazyColumnListState,
                 reverseLayout = true
             ) {
-                itemsIndexed(state.response) { index, response ->
+                items(state.chatEntries) { chatEntry ->
                     Column(modifier = Modifier.fillMaxWidth()) {
                         ResponseItem(modifier = Modifier.fillMaxWidth(),
-                            response = response,
-                            query = state.queries[index],
+                            chatEntryUI = chatEntry,
                             onCopyClick = {
                                 clipboardManager.setText(buildAnnotatedString { append(it) })
+                            },
+                            onSaveClick = { entry ->
+                                onSaveEntry(entry)
                             })
                     }
                 }

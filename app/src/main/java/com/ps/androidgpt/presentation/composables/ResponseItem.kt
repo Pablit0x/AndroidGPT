@@ -31,10 +31,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.ps.androidgpt.R
+import com.ps.androidgpt.presentation.model.ChatEntryUI
 
 @Composable
 fun ResponseItem(
-    response: String, query: String, onCopyClick: (String) -> Unit, modifier: Modifier = Modifier
+    chatEntryUI: ChatEntryUI,
+    onCopyClick: (String) -> Unit,
+    onSaveClick: (ChatEntryUI) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -49,10 +53,15 @@ fun ResponseItem(
 
         Text(
             buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.tertiary)) {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                ) {
                     append("${stringResource(id = R.string.you)}: ")
                 }
-                append(query)
+                append(chatEntryUI.query)
             }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
         )
 
@@ -64,17 +73,24 @@ fun ResponseItem(
 
         Text(
             buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.secondary)) {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                ) {
                     append("${stringResource(id = R.string.chat_gpt)}: ")
                 }
-                append(response)
+                append(chatEntryUI.response)
             }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
         )
 
         Row(
-            modifier = Modifier.align(Alignment.End).padding(8.dp)
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(8.dp)
         ) {
-            IconButton(onClick = { onCopyClick(response) }) {
+            IconButton(onClick = { onCopyClick(chatEntryUI.response) }) {
                 Icon(
                     imageVector = Icons.Default.ContentCopy,
                     contentDescription = null,
@@ -82,7 +98,9 @@ fun ResponseItem(
                 )
             }
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                onSaveClick(chatEntryUI)
+            }) {
                 Icon(
                     imageVector = Icons.Default.Save,
                     contentDescription = null,

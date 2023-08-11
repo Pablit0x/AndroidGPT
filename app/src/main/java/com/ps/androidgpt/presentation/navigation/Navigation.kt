@@ -38,11 +38,16 @@ fun NavGraph(
     val state by chatViewModel.state.collectAsStateWithLifecycle()
 
 
-    NavHost(navController = navController,
+    NavHost(
+        navController = navController,
         startDestination = Screen.HomeScreen.route,
-      ) {
-        composable(route = Screen.HomeScreen.route){
-            ChatScreen(state = state, onSendRequest =chatViewModel::getChatResponse)
+    ) {
+        composable(route = Screen.HomeScreen.route) {
+            ChatScreen(
+                state = state,
+                onSendRequest = chatViewModel::getChatResponse,
+                onSaveEntry = chatViewModel::insertChatEntry
+            )
         }
     }
 

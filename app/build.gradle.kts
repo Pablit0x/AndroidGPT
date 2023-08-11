@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    id ("io.realm.kotlin")
     id("com.google.dagger.hilt.android")
 }
 
@@ -81,6 +82,10 @@ dependencies {
 
     // Extra icons
     implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+
+    // Mango DB
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation ("io.realm.kotlin:library-base:1.6.1")
 
     // Navigation
     implementation ("androidx.navigation:navigation-compose:2.6.0")

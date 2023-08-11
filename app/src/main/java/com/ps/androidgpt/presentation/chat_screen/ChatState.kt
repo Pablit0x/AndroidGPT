@@ -1,8 +1,9 @@
 package com.ps.androidgpt.presentation.chat_screen
 
+import com.ps.androidgpt.presentation.model.ChatEntryUI
+
 data class ChatState(
-    val response: List<String> = listOf(),
-    val queries: List<String> = listOf(),
+    val chatEntries: List<ChatEntryUI> = listOf(),
     val isLoading: Boolean = false,
     val error: String? = null
 )
