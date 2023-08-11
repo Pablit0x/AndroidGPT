@@ -1,8 +1,9 @@
 package com.ps.androidgpt.di
 
-import com.ps.androidgpt.data.ChatApi
+import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.repository.ChatRepositoryImpl
 import com.ps.androidgpt.domain.repository.ChatRepository
+import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -29,6 +30,12 @@ object AppModule {
     @Singleton
     fun provideGptRepository(chatApi: ChatApi) : ChatRepository {
         return ChatRepositoryImpl(chatApi = chatApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetResponseUseCase(chatRepository: ChatRepository) : GetResponseUseCase {
+        return GetResponseUseCase(chatRepository = chatRepository)
     }
 
 }

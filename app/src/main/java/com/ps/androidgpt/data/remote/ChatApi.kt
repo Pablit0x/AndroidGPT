@@ -1,9 +1,8 @@
-package com.ps.androidgpt.data
+package com.ps.androidgpt.data.remote
 
 import com.ps.androidgpt.BuildConfig
-import com.ps.androidgpt.domain.model.ChatCompletion
-import com.ps.androidgpt.domain.model.ChatRequest
-import retrofit2.Response
+import com.ps.androidgpt.data.remote.dto.ChatCompletion
+import com.ps.androidgpt.data.remote.dto.ChatRequestDto
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -14,5 +13,5 @@ interface ChatApi {
         "Authorization: Bearer ${BuildConfig.API_KEY}"
     )
     @POST("v1/chat/completions")
-    suspend fun getChatCompletion(@Body request: ChatRequest): Response<ChatCompletion>
+    suspend fun getChatCompletion(@Body request: ChatRequestDto): ChatCompletion
 }

@@ -1,9 +1,9 @@
-package com.ps.androidgpt.domain.model
+package com.ps.androidgpt.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ChatChoice(
-    val message: ChatMessage,
+data class ChatChoiceDto(
+    val message: ChatMessageDto,
     @SerializedName("finish_reason") val finishReason: String,
     val index: Int
 )

@@ -20,41 +20,41 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.ps.androidgpt.R
 
 @Composable
 fun ResponseItem(
-    response: String,
-    query: String,
-    onCopyClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    response: String, query: String, onCopyClick: (String) -> Unit, modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .shadow(
-                elevation = 5.dp,
-                shape = RoundedCornerShape(20.dp)
+                elevation = 5.dp, shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
             .gradientSurface()
             .padding(8.dp)
     ) {
 
-        Row(modifier.fillMaxWidth()){
 
-            Icon(imageVector = Icons.Outlined.Person, contentDescription = null)
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = query,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(4.dp)
-            )
-        }
+        Text(
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.tertiary)) {
+                    append("${stringResource(id = R.string.you)}: ")
+                }
+                append(query)
+            }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -62,27 +62,23 @@ fun ResponseItem(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row(modifier.fillMaxWidth()){
-
-            Icon(imageVector = Icons.Outlined.Android, contentDescription = null)
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = response,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(4.dp)
-            )
-        }
+        Text(
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.secondary)) {
+                    append("${stringResource(id = R.string.chat_gpt)}: ")
+                }
+                append(response)
+            }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
+        )
 
         Row(
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier.align(Alignment.End).padding(8.dp)
         ) {
             IconButton(onClick = { onCopyClick(response) }) {
                 Icon(
                     imageVector = Icons.Default.ContentCopy,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.surfaceTint
+                    tint = MaterialTheme.colorScheme.secondary
                 )
             }
 
@@ -90,7 +86,7 @@ fun ResponseItem(
                 Icon(
                     imageVector = Icons.Default.Save,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.surfaceTint
+                    tint = MaterialTheme.colorScheme.secondary
                 )
             }
         }
