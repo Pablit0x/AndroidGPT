@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SavedChatsViewModel @Inject constructor(
+class SavedResponsesViewModel @Inject constructor(
     private val getSavedEntriesUseCase: GetSavedEntriesUseCase,
     private val deleteEntryUseCase: DeleteEntryUseCase
 ) : ViewModel() {
