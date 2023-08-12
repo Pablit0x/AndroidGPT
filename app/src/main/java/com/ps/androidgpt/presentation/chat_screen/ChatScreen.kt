@@ -22,11 +22,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,9 +45,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ps.androidgpt.R
+import com.ps.androidgpt.domain.model.ChatEntry
 import com.ps.androidgpt.presentation.composables.ChatEntryItem
 import com.ps.androidgpt.presentation.composables.gradientSurface
-import com.ps.androidgpt.domain.model.ChatEntry
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,14 +83,12 @@ fun ChatScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(id = R.string.app_name),
+                    Text(text = stringResource(id = R.string.app_name),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable{
+                        modifier = Modifier.clickable {
                             navigate()
-                        }
-                    )
+                        })
                 }, scrollBehavior = scrollBehavior
             )
         }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -120,6 +116,9 @@ fun ChatScreen(
                             },
                             onSaveClick = { entry ->
                                 onSaveEntry(entry)
+                                Toast.makeText(
+                                    context, context.getString(R.string.saved), Toast.LENGTH_SHORT
+                                ).show()
                             })
                     }
                 }
@@ -150,10 +149,6 @@ fun ChatScreen(
                     shape = RoundedCornerShape(40),
                     value = chatQuery,
                     onValueChange = { chatQuery = it },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
-                        cursorColor = MaterialTheme.colorScheme.onSecondary
-                    ),
                     trailingIcon = {
                         IconButton(onClick = {
                             onSendRequest(chatQuery)

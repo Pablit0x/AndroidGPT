@@ -7,7 +7,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 import java.util.Calendar
 import java.util.Date
-import java.util.*
+import java.util.Locale
 
 class ChatEntryEntity : RealmObject {
     @PrimaryKey
@@ -19,6 +19,7 @@ class ChatEntryEntity : RealmObject {
 
 fun ChatEntryEntity.toChatEntry() : ChatEntry {
     return ChatEntry(
+        id = id.toHexString(),
         response = response,
         query = query,
         time = timestamp.toDateTime()
@@ -30,8 +31,8 @@ fun RealmInstant.toDateTime(): String {
     calendar.time = Date(this.epochSeconds * 1000)
 
     val day = calendar.get(Calendar.DAY_OF_MONTH)
-    val month = calendar.get(Calendar.MONTH) + 1 // Adding 1 because months are 0-based
-    val year = calendar.get(Calendar.YEAR) % 100 // Taking last two digits of the year
+    val month = calendar.get(Calendar.MONTH) + 1
+    val year = calendar.get(Calendar.YEAR) % 100
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
 

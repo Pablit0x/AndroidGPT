@@ -1,9 +1,10 @@
 package com.ps.androidgpt.di
 
+import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.repository.ChatRepositoryImpl
-import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.domain.repository.ChatRepository
+import com.ps.androidgpt.domain.use_case.delete_entry.DeleteEntryUseCase
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.get_saved_entries.GetSavedEntriesUseCase
 import com.ps.androidgpt.domain.use_case.save_entry.InsertChatEntryUseCase
@@ -60,6 +61,12 @@ object AppModule {
     @Singleton
     fun provideGetSavedEntriesUseCase(chatRepository: ChatRepository) : GetSavedEntriesUseCase{
         return GetSavedEntriesUseCase(chatRepository = chatRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteEntryUseCase(chatRepository: ChatRepository) : DeleteEntryUseCase {
+        return DeleteEntryUseCase(chatRepository = chatRepository)
     }
 
 

@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DeleteOutline
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,12 +29,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.ps.androidgpt.R
 import com.ps.androidgpt.domain.model.ChatEntry
-import org.mongodb.kbson.ObjectId
 
 @Composable
 fun SavedChatEntryItem(
     chatEntry: ChatEntry,
-    onDeleteClick: (id: ObjectId) -> Unit,
+    onCopy: (String) -> Unit,
+    onDeleteClick: (id: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -82,9 +81,6 @@ fun SavedChatEntryItem(
                 append(chatEntry.response)
             }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
         )
-
-        Divider()
-
         Row(
             modifier = Modifier
                 .padding(8.dp)
@@ -95,12 +91,26 @@ fun SavedChatEntryItem(
 
             Text(text = chatEntry.time)
 
-            IconButton(onClick = {}) {
-                Icon(
-                    imageVector = Icons.Default.DeleteOutline,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                IconButton(onClick = { onCopy(chatEntry.response) }) {
+                    Icon(
+                        imageVector = Icons.Default.ContentCopy,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
+                IconButton(onClick = {
+                    chatEntry.id?.let(onDeleteClick)
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.DeleteOutline,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
         }
     }

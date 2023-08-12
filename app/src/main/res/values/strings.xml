@@ -4,4 +4,5 @@
     <string name="you">You</string>
     <string name="chat_gpt">ChatGPT</string>
     <string name="copied_to_clipboard">String copied to clipboard. You can now paste it wherever you need.</string>
+    <string name="saved">Saved</string>
 </resources>

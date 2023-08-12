@@ -3,9 +3,7 @@ package com.ps.androidgpt.domain.model
 import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 
 data class ChatEntry(
-    val response: String,
-    val query: String,
-    val time: String
+    val id: String? = null, val response: String, val query: String, val time: String
 )
 
 fun ChatEntry.toChatEntryEntity(): ChatEntryEntity {

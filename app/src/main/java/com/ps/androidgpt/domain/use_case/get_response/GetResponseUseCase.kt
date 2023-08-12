@@ -16,11 +16,12 @@ class GetResponseUseCase @Inject constructor(
     operator fun invoke(request: ChatRequestDto): Flow<Resource<String>> = flow {
         try {
             emit(Resource.Loading())
-            val chatResponse = chatRepository.getChatCompletion(request = request).toStringResponse()
+            val chatResponse =
+                chatRepository.getChatCompletion(request = request).toStringResponse()
             emit(Resource.Success<String>(data = chatResponse))
-        } catch(e: HttpException) {
+        } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             emit(Resource.Error("Couldn't reach server. Check your internet connection."))
         }
     }
