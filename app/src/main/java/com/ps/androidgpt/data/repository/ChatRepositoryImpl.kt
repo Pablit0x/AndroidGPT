@@ -4,7 +4,7 @@ import android.util.Log
 import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.remote.dto.ChatCompletion
 import com.ps.androidgpt.data.remote.dto.ChatRequestDto
-import com.ps.androidgpt.domain.model.ChatEntry
+import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.utils.TAG
 import io.realm.kotlin.Realm
@@ -21,23 +21,23 @@ class ChatRepositoryImpl @Inject constructor(
         return chatApi.getChatCompletion(request = request)
     }
 
-    override fun getSavedData(): Flow<List<ChatEntry>> {
-        return realm.query<ChatEntry>().asFlow().map { it.list }
+    override fun getSavedData(): Flow<List<ChatEntryEntity>> {
+        return realm.query<ChatEntryEntity>().asFlow().map { it.list }
     }
 
-    override fun filterData(name: String): Flow<List<ChatEntry>> {
-        return realm.query<ChatEntry>(query = "name CONTAINS[c] $0").asFlow().map { it.list }
+    override fun filterData(name: String): Flow<List<ChatEntryEntity>> {
+        return realm.query<ChatEntryEntity>(query = "name CONTAINS[c] $0").asFlow().map { it.list }
     }
 
-    override suspend fun insertChatEntry(chatEntry: ChatEntry) {
-        realm.write { copyToRealm(chatEntry) }
+    override suspend fun insertChatEntry(chatEntryEntity: ChatEntryEntity) {
+        realm.write { copyToRealm(chatEntryEntity) }
     }
 
     override suspend fun deleteChatEntry(id: ObjectId) {
         realm.write {
-            val chatEntry = query<ChatEntry>(query = "id == $0", id).first().find()
+            val chatEntryEntity = query<ChatEntryEntity>(query = "id == $0", id).first().find()
             try {
-                chatEntry?.let {
+                chatEntryEntity?.let {
                     delete(it)
                 }
             } catch (e: IllegalArgumentException) {

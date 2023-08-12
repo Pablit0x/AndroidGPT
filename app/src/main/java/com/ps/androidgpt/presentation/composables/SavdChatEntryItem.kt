@@ -1,18 +1,17 @@
 package com.ps.androidgpt.presentation.composables
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.outlined.Android
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -31,13 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.ps.androidgpt.R
-import com.ps.androidgpt.presentation.model.ChatEntryUI
+import com.ps.androidgpt.domain.model.ChatEntry
+import org.mongodb.kbson.ObjectId
 
 @Composable
-fun ResponseItem(
-    chatEntryUI: ChatEntryUI,
-    onCopyClick: (String) -> Unit,
-    onSaveClick: (ChatEntryUI) -> Unit,
+fun SavedChatEntryItem(
+    chatEntry: ChatEntry,
+    onDeleteClick: (id: ObjectId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -61,7 +59,7 @@ fun ResponseItem(
                 ) {
                     append("${stringResource(id = R.string.you)}: ")
                 }
-                append(chatEntryUI.query)
+                append(chatEntry.query)
             }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
         )
 
@@ -81,28 +79,25 @@ fun ResponseItem(
                 ) {
                     append("${stringResource(id = R.string.chat_gpt)}: ")
                 }
-                append(chatEntryUI.response)
+                append(chatEntry.response)
             }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
         )
 
+        Divider()
+
         Row(
             modifier = Modifier
-                .align(Alignment.End)
                 .padding(8.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { onCopyClick(chatEntryUI.response) }) {
-                Icon(
-                    imageVector = Icons.Default.ContentCopy,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
 
-            IconButton(onClick = {
-                onSaveClick(chatEntryUI)
-            }) {
+            Text(text = chatEntry.time)
+
+            IconButton(onClick = {}) {
                 Icon(
-                    imageVector = Icons.Default.Save,
+                    imageVector = Icons.Default.DeleteOutline,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.secondary
                 )

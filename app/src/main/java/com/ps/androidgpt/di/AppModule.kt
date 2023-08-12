@@ -2,9 +2,10 @@ package com.ps.androidgpt.di
 
 import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.repository.ChatRepositoryImpl
-import com.ps.androidgpt.domain.model.ChatEntry
+import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
+import com.ps.androidgpt.domain.use_case.get_saved_entries.GetSavedEntriesUseCase
 import com.ps.androidgpt.domain.use_case.save_entry.InsertChatEntryUseCase
 import com.ps.androidgpt.utils.Constants
 import dagger.Module
@@ -25,7 +26,7 @@ object AppModule {
     @Singleton
     fun provideRealm(): Realm {
         val realmConfig = RealmConfiguration.Builder(
-            schema = setOf(ChatEntry::class)
+            schema = setOf(ChatEntryEntity::class)
         ).compactOnLaunch().build()
         return Realm.open(configuration = realmConfig)
     }
@@ -54,5 +55,12 @@ object AppModule {
     fun provideInsertChatEntryUseCase(chatRepository: ChatRepository) : InsertChatEntryUseCase{
         return InsertChatEntryUseCase(chatRepository = chatRepository)
     }
+
+    @Provides
+    @Singleton
+    fun provideGetSavedEntriesUseCase(chatRepository: ChatRepository) : GetSavedEntriesUseCase{
+        return GetSavedEntriesUseCase(chatRepository = chatRepository)
+    }
+
 
 }

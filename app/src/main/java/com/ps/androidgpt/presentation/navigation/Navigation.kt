@@ -24,6 +24,8 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.ps.androidgpt.presentation.chat_screen.ChatScreen
 import com.ps.androidgpt.presentation.chat_screen.ChatViewModel
+import com.ps.androidgpt.presentation.saved_chats_screen.SavedChatsScreen
+import com.ps.androidgpt.presentation.saved_chats_screen.SavedChatsViewModel
 
 @Composable
 @ExperimentalComposeUiApi
@@ -34,20 +36,27 @@ fun NavGraph(
     navController: NavHostController
 ) {
 
-    val chatViewModel = hiltViewModel<ChatViewModel>()
-    val state by chatViewModel.state.collectAsStateWithLifecycle()
-
 
     NavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route,
     ) {
         composable(route = Screen.HomeScreen.route) {
-            ChatScreen(
-                state = state,
+
+            val chatViewModel = hiltViewModel<ChatViewModel>()
+            val state by chatViewModel.state.collectAsStateWithLifecycle()
+
+
+            ChatScreen(state = state,
                 onSendRequest = chatViewModel::getChatResponse,
-                onSaveEntry = chatViewModel::insertChatEntry
-            )
+                onSaveEntry = chatViewModel::insertChatEntry,
+                navigate = { navController.navigate(Screen.SavedEntriesScreen.route) })
+        }
+
+        composable(route = Screen.SavedEntriesScreen.route) {
+            val savedChatsViewModel = hiltViewModel<SavedChatsViewModel>()
+            val state by savedChatsViewModel.state.collectAsStateWithLifecycle()
+            SavedChatsScreen(state = state)
         }
     }
 

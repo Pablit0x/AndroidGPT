@@ -1,7 +1,6 @@
-package com.ps.androidgpt.presentation.chat_screen
+package com.ps.androidgpt.presentation.saved_chats_screen
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,38 +46,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ps.androidgpt.R
+import com.ps.androidgpt.presentation.chat_screen.ChatState
 import com.ps.androidgpt.presentation.composables.ChatEntryItem
+import com.ps.androidgpt.presentation.composables.SavedChatEntryItem
 import com.ps.androidgpt.presentation.composables.gradientSurface
-import com.ps.androidgpt.domain.model.ChatEntry
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(
-    state: ChatState,
-    onSendRequest: (String) -> Unit,
-    onSaveEntry: (ChatEntry) -> Unit,
-    navigate: () -> Unit
+fun SavedChatsScreen(
+    state: ChatState
 ) {
-
-    var chatQuery by rememberSaveable {
-        mutableStateOf("")
-    }
-
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
 
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    LaunchedEffect(state) {
-        lazyColumnListState.animateScrollBy(1000f)
-    }
-
-    LaunchedEffect(state.error) {
-        state.error?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        }
-    }
 
 
     Scaffold(
@@ -88,10 +69,7 @@ fun ChatScreen(
                     Text(
                         text = stringResource(id = R.string.app_name),
                         fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable{
-                            navigate()
-                        }
+                        fontWeight = FontWeight.Bold
                     )
                 }, scrollBehavior = scrollBehavior
             )
@@ -113,14 +91,9 @@ fun ChatScreen(
             ) {
                 items(state.chatEntries) { chatEntry ->
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        ChatEntryItem(modifier = Modifier.fillMaxWidth(),
+                        SavedChatEntryItem(modifier = Modifier.fillMaxWidth(),
                             chatEntry = chatEntry,
-                            onCopyClick = {
-                                clipboardManager.setText(buildAnnotatedString { append(it) })
-                            },
-                            onSaveClick = { entry ->
-                                onSaveEntry(entry)
-                            })
+                            onDeleteClick = {})
                     }
                 }
 
@@ -139,41 +112,6 @@ fun ChatScreen(
                         }
                     }
                 }
-            }
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-
-                OutlinedTextField(
-                    shape = RoundedCornerShape(40),
-                    value = chatQuery,
-                    onValueChange = { chatQuery = it },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
-                        cursorColor = MaterialTheme.colorScheme.onSecondary
-                    ),
-                    trailingIcon = {
-                        IconButton(onClick = {
-                            onSendRequest(chatQuery)
-                            chatQuery = ""
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Send, contentDescription = null
-                            )
-                        }
-                    },
-                    placeholder = {
-                        Text(text = stringResource(id = R.string.enter_text))
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .height(64.dp)
-                        .clip(RoundedCornerShape(40))
-                        .gradientSurface()
-                )
             }
         }
     }

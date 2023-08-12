@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.androidgpt.data.remote.dto.ChatMessageDto
 import com.ps.androidgpt.data.remote.dto.ChatRequestDto
-import com.ps.androidgpt.domain.model.ChatEntry
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.save_entry.InsertChatEntryUseCase
-import com.ps.androidgpt.presentation.model.ChatEntryUI
-import com.ps.androidgpt.presentation.model.toChatEntry
+import com.ps.androidgpt.domain.model.ChatEntry
+import com.ps.androidgpt.domain.model.toChatEntryEntity
 import com.ps.androidgpt.utils.Constants
 import com.ps.androidgpt.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +36,7 @@ class ChatViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.update {
                         it.copy(
-                            chatEntries = it.chatEntries + ChatEntryUI(
+                            chatEntries = it.chatEntries + ChatEntry(
                                 response = result.data.toString(),
                                 query = query,
                                 time = RealmInstant.now().toString()
@@ -66,8 +65,8 @@ class ChatViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun insertChatEntry(chatEntryUI: ChatEntryUI){
-        val chatEntry = chatEntryUI.toChatEntry()
+    fun insertChatEntry(chatEntry: ChatEntry){
+        val chatEntry = chatEntry.toChatEntryEntity()
         viewModelScope.launch {
             insertChatEntryUseCase.invoke(chatEntry)
         }

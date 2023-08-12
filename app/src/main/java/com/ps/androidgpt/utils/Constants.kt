@@ -6,4 +6,5 @@ object Constants {
     const val CHAT_ROLE = "user"
 
     const val HOME_SCREEN = "home_screen"
+    const val SAVED_ENTRIES_SCREEN = "saved_entries_screen"
 }
