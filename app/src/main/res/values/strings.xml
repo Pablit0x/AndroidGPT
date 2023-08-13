@@ -10,4 +10,7 @@
     <string name="gpt_model">GPT Model</string>
     <string name="settings_updated">Settings updated successfully.</string>
     <string name="save">Save</string>
+    <string name="start_conversation_placeholder">Greetings! 👋\nI am ready to assist you!\nType your message to start the conversation.</string>
+    <string name="empty_saved">Your saved content is empty.\nFeel free to chat and save valuable responses as you go.</string>
+    <string name="open_chat">Open Chat</string>
 </resources>
