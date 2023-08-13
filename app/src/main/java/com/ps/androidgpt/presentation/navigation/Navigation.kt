@@ -1,6 +1,16 @@
 package com.ps.androidgpt.presentation.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Adjust
@@ -14,11 +24,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.ps.androidgpt.presentation.chat_screen.ChatScreen
 import com.ps.androidgpt.presentation.chat_screen.ChatViewModel
-import com.ps.androidgpt.presentation.composables.DrawerMenuItem
 import com.ps.androidgpt.presentation.saved_chats_screen.SavedChatsScreen
 import com.ps.androidgpt.presentation.saved_chats_screen.SavedResponsesViewModel
 import com.ps.androidgpt.presentation.settings_screen.SettingScreen
@@ -32,10 +41,12 @@ fun NavGraph(
     navController: NavHostController
 ) {
 
-    NavHost(
-        navController = navController,
+    AnimatedNavHost(navController = navController,
         startDestination = Screen.HomeScreen.route,
-    ) {
+        enterTransition = {
+            slideInHorizontally(initialOffsetX = { -1800 })
+        },
+        exitTransition = { ExitTransition.None }) {
         composable(route = Screen.HomeScreen.route) {
 
             val chatViewModel = hiltViewModel<ChatViewModel>()
@@ -61,7 +72,7 @@ fun NavGraph(
             )
         }
 
-        composable(route = Screen.SettingsScreen.route){
+        composable(route = Screen.SettingsScreen.route) {
             SettingScreen(navController = navController)
         }
     }
