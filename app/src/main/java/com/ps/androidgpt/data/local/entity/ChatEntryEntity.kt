@@ -17,7 +17,7 @@ class ChatEntryEntity : RealmObject {
     var timestamp: RealmInstant = RealmInstant.now()
 }
 
-fun ChatEntryEntity.toChatEntry() : ChatEntry {
+fun ChatEntryEntity.toChatEntry(): ChatEntry {
     return ChatEntry(
         id = id.toHexString(),
         response = response,

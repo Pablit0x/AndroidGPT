@@ -53,19 +53,19 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideInsertChatEntryUseCase(chatRepository: ChatRepository) : InsertChatEntryUseCase{
+    fun provideInsertChatEntryUseCase(chatRepository: ChatRepository): InsertChatEntryUseCase {
         return InsertChatEntryUseCase(chatRepository = chatRepository)
     }
 
     @Provides
     @Singleton
-    fun provideGetSavedEntriesUseCase(chatRepository: ChatRepository) : GetSavedEntriesUseCase{
+    fun provideGetSavedEntriesUseCase(chatRepository: ChatRepository): GetSavedEntriesUseCase {
         return GetSavedEntriesUseCase(chatRepository = chatRepository)
     }
 
     @Provides
     @Singleton
-    fun provideDeleteEntryUseCase(chatRepository: ChatRepository) : DeleteEntryUseCase {
+    fun provideDeleteEntryUseCase(chatRepository: ChatRepository): DeleteEntryUseCase {
         return DeleteEntryUseCase(chatRepository = chatRepository)
     }
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class InsertChatEntryUseCase @Inject constructor(
     private val chatRepository: ChatRepository
 ) {
-    suspend operator fun invoke(chatEntryEntity: ChatEntryEntity){
+    suspend operator fun invoke(chatEntryEntity: ChatEntryEntity) {
         chatRepository.insertChatEntry(chatEntryEntity = chatEntryEntity)
     }
 }

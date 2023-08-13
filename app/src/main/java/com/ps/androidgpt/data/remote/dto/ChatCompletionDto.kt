@@ -10,6 +10,6 @@ data class ChatCompletion(
     val choices: List<ChatChoiceDto>
 )
 
-fun ChatCompletion.toStringResponse() : String {
+fun ChatCompletion.toStringResponse(): String {
     return choices.first().message.content
 }

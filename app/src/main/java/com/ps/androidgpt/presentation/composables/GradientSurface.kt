@@ -1,6 +1,5 @@
 package com.ps.androidgpt.presentation.composables
 
-import android.content.res.Resources.Theme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +10,7 @@ import com.ps.androidgpt.presentation.ui.theme.DarkSurfaceEnd
 import com.ps.androidgpt.presentation.ui.theme.DarkSurfaceStart
 
 fun Modifier.gradientSurface(): Modifier = composed {
-    if(isSystemInDarkTheme()){
+    if (isSystemInDarkTheme()) {
         Modifier.background(
             brush = Brush.verticalGradient(
                 colors = listOf(
