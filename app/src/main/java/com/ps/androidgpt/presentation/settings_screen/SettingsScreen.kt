@@ -121,7 +121,7 @@ fun SettingScreen(navController: NavController) {
                             DropdownMenuItem(text = { Text(modelItem) }, onClick = {
                                 isMenuDropdownMenuExpended = false
                                 model = modelItem
-                            }, modifier = Modifier.fillMaxWidth())
+                            })
                         }
                     }
                 }

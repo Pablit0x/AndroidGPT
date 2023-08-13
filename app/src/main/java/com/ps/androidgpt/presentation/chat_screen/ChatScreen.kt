@@ -125,7 +125,7 @@ fun ChatScreen(
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                if (state.chatEntries.isNullOrEmpty()) {
+                if (state.chatEntries.isNullOrEmpty() && !state.isLoading) {
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
