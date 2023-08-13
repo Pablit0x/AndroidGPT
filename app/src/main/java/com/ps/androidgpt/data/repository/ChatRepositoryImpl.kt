@@ -1,10 +1,10 @@
 package com.ps.androidgpt.data.repository
 
 import android.util.Log
+import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.remote.dto.ChatCompletion
 import com.ps.androidgpt.data.remote.dto.ChatRequestDto
-import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.utils.TAG
 import io.realm.kotlin.Realm
@@ -15,10 +15,14 @@ import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
-    private val chatApi: ChatApi, private val realm: Realm
+    private val chatApi: ChatApi,
+    private val realm: Realm
 ) : ChatRepository {
-    override suspend fun getChatCompletion(request: ChatRequestDto): ChatCompletion {
-        return chatApi.getChatCompletion(request = request)
+    override suspend fun getChatCompletion(
+        apiKey: String,
+        request: ChatRequestDto
+    ): ChatCompletion {
+        return chatApi.getChatCompletion(authorization = " Bearer $apiKey", request = request)
     }
 
     override fun getSavedData(): Flow<List<ChatEntryEntity>> {

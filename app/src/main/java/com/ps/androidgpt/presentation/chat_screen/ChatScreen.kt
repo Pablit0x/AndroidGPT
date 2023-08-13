@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -47,18 +48,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ps.androidgpt.R
 import com.ps.androidgpt.domain.model.ChatEntry
+import com.ps.androidgpt.domain.model.UserSettings
 import com.ps.androidgpt.presentation.composables.ChatEntryItem
-import com.ps.androidgpt.presentation.composables.MyTopAppBar
 import com.ps.androidgpt.presentation.composables.MyNavigationDrawer
+import com.ps.androidgpt.presentation.composables.MyTopAppBar
 import com.ps.androidgpt.presentation.composables.gradientSurface
 import com.ps.androidgpt.presentation.navigation.Screen
+import com.ps.androidgpt.utils.Constants
+import com.ps.androidgpt.utils.dataStore
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     state: ChatState,
-    onSendRequest: (String) -> Unit,
+    onSendRequest: (UserSettings, String) -> Unit,
     onSaveEntry: (ChatEntry) -> Unit,
     navController: NavController
 ) {
@@ -74,6 +78,17 @@ fun ChatScreen(
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var apiKey: String by remember { mutableStateOf(Constants.INVALID_API_KEY) }
+    var model: String by remember { mutableStateOf(Constants.DEFAULT_MODEL_ID) }
+
+    LaunchedEffect(Unit) {
+        launch {
+            context.dataStore.data.collect { userSettings ->
+                apiKey = userSettings.apiKey
+                model = userSettings.model
+            }
+        }
+    }
 
 
     LaunchedEffect(state) {
@@ -90,7 +105,7 @@ fun ChatScreen(
     ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
         MyNavigationDrawer(modifier = Modifier.fillMaxWidth(0.7f),
             currentScreenId = Screen.HomeScreen.id,
-            onItemClick = {destination ->
+            onItemClick = { destination ->
                 scope.launch { drawerState.close() }
                 navController.navigate(destination)
             })
@@ -98,8 +113,7 @@ fun ChatScreen(
         Scaffold(
             topBar = {
                 MyTopAppBar(
-                    title = stringResource(id = R.string.app_name),
-                    drawerState = drawerState
+                    title = stringResource(id = R.string.app_name), drawerState = drawerState
                 )
             }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
@@ -163,7 +177,11 @@ fun ChatScreen(
                         onValueChange = { chatQuery = it },
                         trailingIcon = {
                             IconButton(onClick = {
-                                onSendRequest(chatQuery)
+                                onSendRequest(
+                                    UserSettings(
+                                        model = model, apiKey = apiKey
+                                    ), chatQuery
+                                )
                                 chatQuery = ""
                             }) {
                                 Icon(

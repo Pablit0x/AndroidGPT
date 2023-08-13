@@ -13,11 +13,12 @@ import javax.inject.Inject
 class GetResponseUseCase @Inject constructor(
     private val chatRepository: ChatRepository
 ) {
-    operator fun invoke(request: ChatRequestDto): Flow<Resource<String>> = flow {
+    operator fun invoke(apiKey: String, request: ChatRequestDto): Flow<Resource<String>> = flow {
         try {
             emit(Resource.Loading())
             val chatResponse =
-                chatRepository.getChatCompletion(request = request).toStringResponse()
+                chatRepository.getChatCompletion(apiKey = apiKey, request = request)
+                    .toStringResponse()
             emit(Resource.Success<String>(data = chatResponse))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))

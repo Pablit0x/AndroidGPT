@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.androidgpt.data.remote.dto.ChatMessageDto
 import com.ps.androidgpt.data.remote.dto.ChatRequestDto
+import com.ps.androidgpt.domain.model.ChatEntry
+import com.ps.androidgpt.domain.model.UserSettings
+import com.ps.androidgpt.domain.model.toChatEntryEntity
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.save_entry.InsertChatEntryUseCase
-import com.ps.androidgpt.domain.model.ChatEntry
-import com.ps.androidgpt.domain.model.toChatEntryEntity
 import com.ps.androidgpt.utils.Constants
 import com.ps.androidgpt.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,15 +24,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val getResponseUseCase: GetResponseUseCase,
-    private val insertChatEntryUseCase: InsertChatEntryUseCase
+    private val insertChatEntryUseCase: InsertChatEntryUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ChatState())
     val state = _state.asStateFlow()
 
-    fun getChatResponse(query: String) {
-        val chatRequest = query.toChatRequest()
-        getResponseUseCase(chatRequest).onEach { result ->
+    fun getChatResponse(userSettings: UserSettings, query: String) {
+        val chatRequest = query.toChatRequest(userSettings.model)
+        getResponseUseCase(userSettings.apiKey, chatRequest).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _state.update {
@@ -40,11 +41,11 @@ class ChatViewModel @Inject constructor(
                                 response = result.data.toString(),
                                 query = query,
                                 time = RealmInstant.now().toString()
-                            ),
-                            isLoading = false
+                            ), isLoading = false
                         )
                     }
                 }
+
                 is Resource.Error -> {
                     _state.update {
                         it.copy(
@@ -65,16 +66,16 @@ class ChatViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun insertChatEntry(chatEntry: ChatEntry){
-        val chatEntry = chatEntry.toChatEntryEntity()
+    fun insertChatEntry(entry: ChatEntry) {
+        val chatEntry = entry.toChatEntryEntity()
         viewModelScope.launch {
             insertChatEntryUseCase.invoke(chatEntry)
         }
     }
 
-    private fun String.toChatRequest(): ChatRequestDto {
+    private fun String.toChatRequest(model: String): ChatRequestDto {
         return ChatRequestDto(
-            model = Constants.MODEL_ID,
+            model = model,
             messages = listOf(ChatMessageDto(role = Constants.CHAT_ROLE, content = this))
         )
     }
