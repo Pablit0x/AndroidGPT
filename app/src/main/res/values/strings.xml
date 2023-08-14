@@ -19,4 +19,5 @@
     <string name="navigate_saved">Navigate Saved</string>
     <string name="navigate_prompts">Navigate Prompts</string>
     <string name="navigate_settings">Navigate Settings</string>
+    <string name="undo">Undo</string>
 </resources>

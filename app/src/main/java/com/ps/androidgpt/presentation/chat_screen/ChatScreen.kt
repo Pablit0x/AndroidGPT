@@ -1,5 +1,6 @@
 package com.ps.androidgpt.presentation.chat_screen
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -33,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,6 +53,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ps.androidgpt.R
+import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.domain.model.ChatEntry
 import com.ps.androidgpt.domain.model.UserSettings
 import com.ps.androidgpt.presentation.composables.ChatEntryItem
@@ -57,13 +63,15 @@ import com.ps.androidgpt.presentation.composables.gradientSurface
 import com.ps.androidgpt.presentation.navigation.Screen
 import com.ps.androidgpt.utils.Constants
 import com.ps.androidgpt.utils.dataStore
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     state: ChatState,
     onSendRequest: (UserSettings, String) -> Unit,
-    onSaveEntry: (ChatEntry) -> Unit,
+    onSaveEntry: (ChatEntry) -> ChatEntryEntity,
+    onDeleteEntry: (String) -> Unit,
     navController: NavController,
     drawerState: DrawerState
 ) {
@@ -74,6 +82,8 @@ fun ChatScreen(
 
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
+    val snackBarState by remember { mutableStateOf(SnackbarHostState()) }
+    val scope = rememberCoroutineScope()
 
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -105,12 +115,11 @@ fun ChatScreen(
                 navController.navigate(destination)
             })
     }) {
-        Scaffold(
-            topBar = {
-                MyTopAppBar(
-                    title = stringResource(id = R.string.app_name), drawerState = drawerState
-                )
-            }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        Scaffold(snackbarHost = { SnackbarHost(snackBarState) }, topBar = {
+            MyTopAppBar(
+                title = stringResource(id = R.string.app_name), drawerState = drawerState
+            )
+        }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
             Column(
                 modifier = Modifier
@@ -149,12 +158,22 @@ fun ChatScreen(
                                         clipboardManager.setText(buildAnnotatedString { append(it) })
                                     },
                                     onSaveClick = { entry ->
-                                        onSaveEntry(entry)
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.saved),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        val chatEntryEntity = onSaveEntry(entry)
+
+                                        scope.launch {
+                                            when (snackBarState.showSnackbar(
+                                                message = context.getString(
+                                                    R.string.saved
+                                                ), actionLabel = context.getString(R.string.undo)
+                                            )) {
+                                                SnackbarResult.ActionPerformed -> {
+                                                    onDeleteEntry(chatEntryEntity.id.toHexString())
+                                                }
+
+                                                SnackbarResult.Dismissed -> {
+                                                }
+                                            }
+                                        }
                                     })
                             }
                         }

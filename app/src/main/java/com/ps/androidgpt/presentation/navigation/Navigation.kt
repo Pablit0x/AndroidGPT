@@ -45,6 +45,7 @@ fun NavGraph() {
                 state = state,
                 onSendRequest = chatViewModel::getChatResponse,
                 onSaveEntry = chatViewModel::insertChatEntry,
+                onDeleteEntry = chatViewModel::deleteEntry,
                 navController = navController,
                 drawerState = drawerState
             )

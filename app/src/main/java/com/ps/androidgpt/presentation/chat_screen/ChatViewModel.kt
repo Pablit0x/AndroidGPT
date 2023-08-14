@@ -1,12 +1,15 @@
 package com.ps.androidgpt.presentation.chat_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.data.remote.dto.ChatMessageDto
 import com.ps.androidgpt.data.remote.dto.ChatRequestDto
 import com.ps.androidgpt.domain.model.ChatEntry
 import com.ps.androidgpt.domain.model.UserSettings
 import com.ps.androidgpt.domain.model.toChatEntryEntity
+import com.ps.androidgpt.domain.use_case.delete_entry.DeleteEntryUseCase
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.save_entry.InsertChatEntryUseCase
 import com.ps.androidgpt.utils.Constants
@@ -18,13 +21,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.future.asCompletableFuture
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val getResponseUseCase: GetResponseUseCase,
     private val insertChatEntryUseCase: InsertChatEntryUseCase,
+    private val deleteEntryUseCase: DeleteEntryUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ChatState())
@@ -66,11 +73,16 @@ class ChatViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun insertChatEntry(entry: ChatEntry) {
+    fun insertChatEntry(entry: ChatEntry) : ChatEntryEntity{
         val chatEntry = entry.toChatEntryEntity()
         viewModelScope.launch {
             insertChatEntryUseCase.invoke(chatEntry)
         }
+        return chatEntry
+    }
+
+    fun deleteEntry(id: String) {
+        viewModelScope.launch { deleteEntryUseCase.invoke(id = id) }
     }
 
     private fun String.toChatRequest(model: String): ChatRequestDto {
