@@ -59,7 +59,9 @@ import com.ps.androidgpt.presentation.composables.gradientSurface
 import com.ps.androidgpt.presentation.navigation.Screen
 import com.ps.androidgpt.utils.Constants
 import com.ps.androidgpt.utils.dataStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +78,6 @@ fun ChatScreen(
 
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -85,14 +86,15 @@ fun ChatScreen(
     var model: String by remember { mutableStateOf(Constants.DEFAULT_MODEL_ID) }
 
     LaunchedEffect(Unit) {
-        launch {
-            context.dataStore.data.collect { userSettings ->
-                apiKey = userSettings.apiKey
-                model = userSettings.model
-            }
+        context.dataStore.data.collect { userSettings ->
+            apiKey = userSettings.apiKey
+            model = userSettings.model
+        }
+
+        if (drawerState.isOpen) {
+            drawerState.close()
         }
     }
-
 
     LaunchedEffect(state) {
         lazyColumnListState.animateScrollBy(1000f)
@@ -109,7 +111,6 @@ fun ChatScreen(
         MyNavigationDrawer(modifier = Modifier.fillMaxWidth(0.7f),
             currentScreenId = Screen.HomeScreen.id,
             onItemClick = { destination ->
-                scope.launch { drawerState.close() }
                 navController.navigate(destination)
             })
     }) {

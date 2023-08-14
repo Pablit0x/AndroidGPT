@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ps.androidgpt.R
+import com.ps.androidgpt.domain.model.ChatEntry
 import com.ps.androidgpt.presentation.chat_screen.ChatState
 import com.ps.androidgpt.presentation.composables.MyNavigationDrawer
 import com.ps.androidgpt.presentation.composables.MyTopAppBar
@@ -48,7 +49,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun SavedChatsScreen(
-    state: ChatState, onDelete: (String) -> Unit, navController: NavController
+    chatEntries: List<ChatEntry>, onDelete: (String) -> Unit, navController: NavController
 ) {
     val clipboardManager = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
@@ -80,7 +81,7 @@ fun SavedChatsScreen(
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                if (state.chatEntries.isNullOrEmpty()) {
+                if (chatEntries.isNullOrEmpty()) {
                     Column(
                         modifier = Modifier
                             .padding(16.dp)
@@ -118,7 +119,7 @@ fun SavedChatsScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         state = lazyColumnListState
                     ) {
-                        items(state.chatEntries) { chatEntry ->
+                        items(chatEntries) { chatEntry ->
                             Column(modifier = Modifier.fillMaxWidth()) {
                                 SavedChatEntryItem(modifier = Modifier
                                     .fillMaxWidth()

@@ -1,5 +1,6 @@
 package com.ps.androidgpt.presentation.settings_screen
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,13 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -21,6 +28,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +41,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ps.androidgpt.R
@@ -65,13 +79,15 @@ fun SettingScreen(navController: NavController) {
             apiKey = settings.apiKey
             model = settings.model
         }
+
+        if (drawerState.isOpen) {
+            drawerState.close()
+        }
     }
 
     ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
-        MyNavigationDrawer(
-            currentScreenId = Screen.SettingsScreen.id,
+        MyNavigationDrawer(currentScreenId = Screen.SettingsScreen.id,
             onItemClick = { destination ->
-                scope.launch { drawerState.close() }
                 navController.navigate(destination)
             })
     }) {
@@ -86,15 +102,28 @@ fun SettingScreen(navController: NavController) {
                     .padding(16.dp)
                     .fillMaxSize()
             ) {
-                OutlinedTextField(modifier = Modifier.fillMaxWidth(),
-                    maxLines = 3,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password
-                    ),
+                var apiKeyIsVisible by remember {
+                    mutableStateOf(false)
+                }
+
+                OutlinedTextField(modifier = Modifier
+                    .fillMaxWidth(),
+                    singleLine = true,
+                    visualTransformation = if (apiKeyIsVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     label = { Text(stringResource(id = R.string.api_key)) },
                     value = apiKey,
                     onValueChange = {
                         apiKey = it
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            apiKeyIsVisible = !apiKeyIsVisible
+                        }) {
+                            Icon(
+                                imageVector = if (apiKeyIsVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                contentDescription = null
+                            )
+                        }
                     })
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -104,8 +133,7 @@ fun SettingScreen(navController: NavController) {
                     onExpandedChange = {
                         isMenuDropdownMenuExpended = !isMenuDropdownMenuExpended
                     }) {
-                    TextField(
-                        value = model,
+                    TextField(value = model,
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(id = R.string.gpt_model)) },
@@ -129,9 +157,7 @@ fun SettingScreen(navController: NavController) {
                     Button(modifier = Modifier.padding(16.dp), onClick = {
                         scope.launch {
                             context.dataStore.updateData {
-                                it.copy(
-                                    model = model, apiKey = apiKey
-                                )
+                                it.copy(model = model, apiKey = apiKey)
                             }
                             snackBarState.showSnackbar(message = context.getString(R.string.settings_updated))
                         }
