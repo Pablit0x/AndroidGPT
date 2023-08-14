@@ -3,16 +3,15 @@ package com.ps.androidgpt.presentation.navigation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -30,10 +29,13 @@ import com.ps.androidgpt.presentation.settings_screen.SettingScreen
 @ExperimentalFoundationApi
 fun NavGraph() {
     val navController = rememberAnimatedNavController()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     AnimatedNavHost(navController = navController,
         startDestination = Screen.HomeScreen.route,
-        enterTransition = { EnterTransition.None },
+        enterTransition = {
+            EnterTransition.None
+        },
         exitTransition = { ExitTransition.None }) {
         composable(route = Screen.HomeScreen.route) {
             val chatViewModel = hiltViewModel<ChatViewModel>()
@@ -43,7 +45,8 @@ fun NavGraph() {
                 state = state,
                 onSendRequest = chatViewModel::getChatResponse,
                 onSaveEntry = chatViewModel::insertChatEntry,
-                navController = navController
+                navController = navController,
+                drawerState = drawerState
             )
         }
 
@@ -53,16 +56,19 @@ fun NavGraph() {
             SavedChatsScreen(
                 chatEntries = chatEntries,
                 onDelete = savedResponsesViewModel::deleteEntry,
-                navController = navController
+                navController = navController,
+                drawerState = drawerState
             )
         }
 
         composable(route = Screen.SettingsScreen.route) {
-            SettingScreen(navController = navController)
+            SettingScreen(
+                navController = navController, drawerState = drawerState
+            )
         }
 
         composable(route = Screen.PromptsScreen.route) {
-            PromptsScreen(navController = navController)
+            PromptsScreen(navController = navController, drawerState = drawerState)
         }
     }
 }

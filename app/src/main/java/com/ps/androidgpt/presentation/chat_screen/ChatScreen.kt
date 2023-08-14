@@ -18,7 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,13 +28,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,9 +57,6 @@ import com.ps.androidgpt.presentation.composables.gradientSurface
 import com.ps.androidgpt.presentation.navigation.Screen
 import com.ps.androidgpt.utils.Constants
 import com.ps.androidgpt.utils.dataStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +64,8 @@ fun ChatScreen(
     state: ChatState,
     onSendRequest: (UserSettings, String) -> Unit,
     onSaveEntry: (ChatEntry) -> Unit,
-    navController: NavController
+    navController: NavController,
+    drawerState: DrawerState
 ) {
 
     var chatQuery by rememberSaveable {
@@ -81,7 +77,6 @@ fun ChatScreen(
 
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var apiKey: String by remember { mutableStateOf(Constants.INVALID_API_KEY) }
     var model: String by remember { mutableStateOf(Constants.DEFAULT_MODEL_ID) }
 
@@ -89,10 +84,6 @@ fun ChatScreen(
         context.dataStore.data.collect { userSettings ->
             apiKey = userSettings.apiKey
             model = userSettings.model
-        }
-
-        if (drawerState.isOpen) {
-            drawerState.close()
         }
     }
 
