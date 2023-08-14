@@ -1,9 +1,12 @@
 package com.ps.androidgpt.di
 
 import com.ps.androidgpt.data.local.entity.ChatEntryEntity
+import com.ps.androidgpt.data.local.entity.PromptEntity
 import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.repository.ChatRepositoryImpl
+import com.ps.androidgpt.data.repository.PromptRepositoryImpl
 import com.ps.androidgpt.domain.repository.ChatRepository
+import com.ps.androidgpt.domain.repository.PromptRepository
 import com.ps.androidgpt.domain.use_case.delete_entry.DeleteEntryUseCase
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.get_saved_entries.GetSavedEntriesUseCase
@@ -13,6 +16,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.realm.kotlin.InitialDataCallback
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import retrofit2.Retrofit
@@ -27,7 +31,7 @@ object AppModule {
     @Singleton
     fun provideRealm(): Realm {
         val realmConfig = RealmConfiguration.Builder(
-            schema = setOf(ChatEntryEntity::class)
+            schema = setOf(ChatEntryEntity::class, PromptEntity::class)
         ).compactOnLaunch().build()
         return Realm.open(configuration = realmConfig)
     }
@@ -43,6 +47,12 @@ object AppModule {
     @Singleton
     fun provideGptRepository(chatApi: ChatApi, realm: Realm): ChatRepository {
         return ChatRepositoryImpl(chatApi = chatApi, realm = realm)
+    }
+
+    @Provides
+    @Singleton
+    fun providePromptRepository(realm: Realm): PromptRepository {
+        return PromptRepositoryImpl(realm = realm)
     }
 
     @Provides
