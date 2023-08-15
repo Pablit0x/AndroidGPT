@@ -10,6 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -18,6 +20,7 @@ import com.ps.androidgpt.R
 import com.ps.androidgpt.presentation.composables.MyNavigationDrawer
 import com.ps.androidgpt.presentation.composables.MyTopAppBar
 import com.ps.androidgpt.presentation.navigation.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +31,7 @@ fun PromptsScreen(navController: NavController, drawerState: DrawerState) {
         MyNavigationDrawer(
             currentScreenId = Screen.PromptsScreen.id, onItemClick = { destination ->
                 navController.navigate(destination)
-            }, modifier = Modifier.fillMaxWidth(0.7f)
+            }, modifier = Modifier.fillMaxWidth(0.5f)
         )
     }) {
         Scaffold(topBar = {

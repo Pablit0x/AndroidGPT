@@ -32,9 +32,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -54,6 +57,7 @@ import com.ps.androidgpt.presentation.composables.MyNavigationDrawer
 import com.ps.androidgpt.presentation.composables.MyTopAppBar
 import com.ps.androidgpt.presentation.composables.SavedChatEntryItem
 import com.ps.androidgpt.presentation.navigation.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -70,14 +74,15 @@ fun SavedChatsScreen(
     val clipboardManager = LocalClipboardManager.current
     val lazyColumnListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
 
+
+
     ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
-        MyNavigationDrawer(modifier = Modifier.fillMaxWidth(0.7f),
+        MyNavigationDrawer(modifier = Modifier.fillMaxWidth(0.5f),
             currentScreenId = Screen.SavedEntriesScreen.id,
             onItemClick = { destination ->
                 navController.navigate(destination)

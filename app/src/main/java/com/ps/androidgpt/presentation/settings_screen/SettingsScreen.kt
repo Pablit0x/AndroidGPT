@@ -75,7 +75,7 @@ fun SettingScreen(navController: NavController, drawerState: DrawerState) {
             currentScreenId = Screen.SettingsScreen.id,
             onItemClick = { destination ->
                 navController.navigate(destination)
-            }, modifier = Modifier.fillMaxWidth(0.7f)
+            }, modifier = Modifier.fillMaxWidth(0.5f)
         )
     }) {
         Scaffold(snackbarHost = { SnackbarHost(snackBarState) }, topBar = {

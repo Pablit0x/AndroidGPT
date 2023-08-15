@@ -32,6 +32,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -108,7 +109,7 @@ fun ChatScreen(
 
 
     ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
-        MyNavigationDrawer(modifier = Modifier.fillMaxWidth(0.7f),
+        MyNavigationDrawer(modifier = Modifier.fillMaxWidth(0.5f),
             currentScreenId = Screen.HomeScreen.id,
             onItemClick = { destination ->
                 navController.navigate(destination)
