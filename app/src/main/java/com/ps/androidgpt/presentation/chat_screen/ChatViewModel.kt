@@ -1,6 +1,5 @@
 package com.ps.androidgpt.presentation.chat_screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.androidgpt.data.local.entity.ChatEntryEntity
@@ -21,10 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.future.asCompletableFuture
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,7 +69,7 @@ class ChatViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun insertChatEntry(entry: ChatEntry) : ChatEntryEntity{
+    fun insertChatEntry(entry: ChatEntry): ChatEntryEntity {
         val chatEntry = entry.toChatEntryEntity()
         viewModelScope.launch {
             insertChatEntryUseCase.invoke(chatEntry)

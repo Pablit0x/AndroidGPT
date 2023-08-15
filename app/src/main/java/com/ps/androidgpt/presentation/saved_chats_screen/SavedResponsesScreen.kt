@@ -128,7 +128,8 @@ fun SavedChatsScreen(
                     }
                 } else {
                     AnimatedVisibility(visible = isSearchActive) {
-                        OutlinedTextField(value = searchQuery,
+                        OutlinedTextField(
+                            value = searchQuery,
                             onValueChange = { searchQuery = it },
                             placeholder = { Text(text = stringResource(id = R.string.search)) },
                             trailingIcon = {

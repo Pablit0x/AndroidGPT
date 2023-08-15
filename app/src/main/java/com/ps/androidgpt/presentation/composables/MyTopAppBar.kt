@@ -42,7 +42,7 @@ fun MyTopAppBar(
         }
     },
         actions = {
-            if(actionIcon != null){
+            if (actionIcon != null) {
                 IconButton(onClick = { onActionClick() }) {
                     Icon(imageVector = actionIcon, contentDescription = null)
                 }

@@ -71,7 +71,8 @@ fun SettingScreen(navController: NavController, drawerState: DrawerState) {
     }
 
     ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
-        MyNavigationDrawer(currentScreenId = Screen.SettingsScreen.id,
+        MyNavigationDrawer(
+            currentScreenId = Screen.SettingsScreen.id,
             onItemClick = { destination ->
                 navController.navigate(destination)
             }, modifier = Modifier.fillMaxWidth(0.7f)
@@ -119,7 +120,8 @@ fun SettingScreen(navController: NavController, drawerState: DrawerState) {
                     onExpandedChange = {
                         isMenuDropdownMenuExpended = !isMenuDropdownMenuExpended
                     }) {
-                    TextField(value = model,
+                    TextField(
+                        value = model,
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(id = R.string.gpt_model)) },

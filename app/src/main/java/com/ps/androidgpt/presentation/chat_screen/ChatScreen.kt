@@ -1,6 +1,5 @@
 package com.ps.androidgpt.presentation.chat_screen
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement

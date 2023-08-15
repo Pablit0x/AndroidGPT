@@ -1,7 +1,6 @@
 package com.ps.androidgpt.data.repository
 
 import android.util.Log
-import com.ps.androidgpt.data.local.entity.ChatEntryEntity
 import com.ps.androidgpt.data.local.entity.PromptEntity
 import com.ps.androidgpt.domain.repository.PromptRepository
 import com.ps.androidgpt.utils.TAG

@@ -97,8 +97,7 @@ fun SavedChatEntryItem(
                 fontStyle = FontStyle.Italic
             )
 
-            Row(
-            ) {
+            Row {
                 IconButton(onClick = { onCopy(chatEntry.response) }) {
                     Icon(
                         imageVector = Icons.Default.ContentCopy,
