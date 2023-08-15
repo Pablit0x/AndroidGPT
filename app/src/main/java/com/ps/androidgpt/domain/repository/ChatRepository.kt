@@ -9,7 +9,6 @@ import org.mongodb.kbson.ObjectId
 interface ChatRepository {
     suspend fun getChatCompletion(apiKey: String, request: ChatRequestDto): ChatCompletion
     fun getSavedData(): Flow<List<ChatEntryEntity>>
-    fun filterData(name: String): Flow<List<ChatEntryEntity>>
     suspend fun insertChatEntry(chatEntryEntity: ChatEntryEntity)
     suspend fun deleteChatEntry(id: ObjectId)
 }

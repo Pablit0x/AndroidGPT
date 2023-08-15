@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -59,7 +60,7 @@ fun SavedChatEntryItem(
                     append("${stringResource(id = R.string.you)}: ")
                 }
                 append(chatEntry.query)
-            }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
+            }, color = MaterialTheme.colorScheme.outline, modifier = Modifier.padding(4.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -79,8 +80,9 @@ fun SavedChatEntryItem(
                     append("${stringResource(id = R.string.chat_gpt)}: ")
                 }
                 append(chatEntry.response)
-            }, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(4.dp)
+            }, color = MaterialTheme.colorScheme.outline, modifier = Modifier.padding(4.dp)
         )
+        Spacer(modifier = Modifier.height(4.dp))
         Row(
             modifier = Modifier
                 .padding(4.dp)
@@ -89,7 +91,11 @@ fun SavedChatEntryItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(text = chatEntry.time, color = MaterialTheme.colorScheme.tertiary)
+            Text(
+                text = chatEntry.time,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontStyle = FontStyle.Italic
+            )
 
             Row(
             ) {
@@ -97,7 +103,7 @@ fun SavedChatEntryItem(
                     Icon(
                         imageVector = Icons.Default.ContentCopy,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -107,7 +113,7 @@ fun SavedChatEntryItem(
                     Icon(
                         imageVector = Icons.Outlined.Delete,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

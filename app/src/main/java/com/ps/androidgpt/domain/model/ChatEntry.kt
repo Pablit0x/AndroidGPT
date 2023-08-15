@@ -12,3 +12,9 @@ fun ChatEntry.toChatEntryEntity(): ChatEntryEntity {
     chatEntryEntity.query = query
     return chatEntryEntity
 }
+
+fun ChatEntry.matchesSearch(searchQuery: String): Boolean {
+    val normalizedQuery = searchQuery.lowercase()
+
+    return response.lowercase().contains(normalizedQuery) || query.lowercase().contains(normalizedQuery)
+}

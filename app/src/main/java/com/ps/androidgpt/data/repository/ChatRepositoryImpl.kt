@@ -29,10 +29,6 @@ class ChatRepositoryImpl @Inject constructor(
         return realm.query<ChatEntryEntity>().asFlow().map { it.list }
     }
 
-    override fun filterData(name: String): Flow<List<ChatEntryEntity>> {
-        return realm.query<ChatEntryEntity>(query = "name CONTAINS[c] $0").asFlow().map { it.list }
-    }
-
     override suspend fun insertChatEntry(chatEntryEntity: ChatEntryEntity) {
         realm.write { copyToRealm(chatEntryEntity) }
     }

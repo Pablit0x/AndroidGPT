@@ -12,6 +12,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
@@ -21,7 +22,9 @@ import kotlinx.coroutines.launch
 fun MyTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    actionIcon: ImageVector? = null,
+    onActionClick: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
@@ -37,5 +40,12 @@ fun MyTopAppBar(
         }) {
             Icon(imageVector = Icons.Default.Menu, contentDescription = null)
         }
-    })
+    },
+        actions = {
+            if(actionIcon != null){
+                IconButton(onClick = { onActionClick() }) {
+                    Icon(imageVector = actionIcon, contentDescription = null)
+                }
+            }
+        })
 }
