@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Adjust
 import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
@@ -37,28 +38,32 @@ fun MyNavigationDrawer(
     modifier: Modifier = Modifier, currentScreenId: Int, onItemClick: (destination: String) -> Unit
 ) {
     val menuItems = listOf(
-        DrawerMenuItem(0,
+        DrawerMenuItem(
+            Screen.HomeScreen.id,
             Icons.Filled.Home,
             Icons.Outlined.Home,
             stringResource(id = R.string.home),
             stringResource(id = R.string.navigate_home),
             onClickAction = {
                 onItemClick(Screen.HomeScreen.route)
-            }), DrawerMenuItem(1,
+            }), DrawerMenuItem(
+            Screen.SavedEntriesScreen.id,
             Icons.Filled.Bookmark,
-            Icons.Outlined.Bookmark,
+            Icons.Outlined.BookmarkBorder,
             stringResource(id = R.string.saved),
             stringResource(id = R.string.navigate_saved),
             onClickAction = {
                 onItemClick(Screen.SavedEntriesScreen.route)
-            }), DrawerMenuItem(2,
+            }), DrawerMenuItem(
+            Screen.PromptsScreen.id,
             Icons.Filled.Adjust,
             Icons.Outlined.Adjust,
             stringResource(id = R.string.prompts),
             stringResource(id = R.string.navigate_prompts),
             onClickAction = {
                 onItemClick(Screen.PromptsScreen.route)
-            }), DrawerMenuItem(3,
+            }), DrawerMenuItem(
+            Screen.SettingsScreen.id,
             Icons.Filled.Settings,
             Icons.Outlined.Settings,
             stringResource(id = R.string.settings),
