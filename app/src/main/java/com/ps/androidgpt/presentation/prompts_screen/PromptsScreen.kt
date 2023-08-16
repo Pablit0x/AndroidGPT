@@ -36,7 +36,9 @@ fun PromptsScreen(navController: NavController, drawerState: DrawerState) {
     }) {
         Scaffold(topBar = {
             MyTopAppBar(
-                title = stringResource(id = R.string.prompts), drawerState = drawerState
+                scrollBehavior = scrollBehavior,
+                title = stringResource(id = R.string.prompts),
+                drawerState = drawerState
             )
         }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
             LazyColumn(

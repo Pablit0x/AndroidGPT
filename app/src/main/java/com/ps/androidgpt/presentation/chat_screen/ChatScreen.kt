@@ -116,7 +116,9 @@ fun ChatScreen(
     }) {
         Scaffold(snackbarHost = { SnackbarHost(snackBarState) }, topBar = {
             MyTopAppBar(
-                title = stringResource(id = R.string.app_name), drawerState = drawerState
+                scrollBehavior = scrollBehavior,
+                title = stringResource(id = R.string.app_name),
+                drawerState = drawerState
             )
         }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->

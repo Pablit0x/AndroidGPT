@@ -2,7 +2,9 @@ package com.ps.androidgpt.presentation.saved_chats_screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -61,12 +64,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
-    ExperimentalComposeUiApi::class
-)
+    ExperimentalFoundationApi::class)
 @Composable
 fun SavedChatsScreen(
-    chatEntries: List<ChatEntry>,
+    chatEntries: List<ChatEntry>?,
     onDelete: (String) -> Unit,
     navController: NavController,
     drawerState: DrawerState
@@ -77,8 +78,6 @@ fun SavedChatsScreen(
 
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
-
-
 
 
     ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
@@ -93,7 +92,7 @@ fun SavedChatsScreen(
                 MyTopAppBar(title = stringResource(id = R.string.saved),
                     scrollBehavior = scrollBehavior,
                     drawerState = drawerState,
-                    actionIcon = if (chatEntries.isNotEmpty()) Icons.Default.Search else null,
+                    actionIcon = if (chatEntries.isNullOrEmpty()) null else Icons.Default.Search,
                     onActionClick = { isSearchActive = !isSearchActive })
             }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
@@ -133,8 +132,7 @@ fun SavedChatsScreen(
                     }
                 } else {
                     AnimatedVisibility(visible = isSearchActive) {
-                        OutlinedTextField(
-                            value = searchQuery,
+                        OutlinedTextField(value = searchQuery,
                             onValueChange = { searchQuery = it },
                             placeholder = { Text(text = stringResource(id = R.string.search)) },
                             trailingIcon = {
@@ -153,28 +151,30 @@ fun SavedChatsScreen(
                                 .padding(16.dp)
                         )
                     }
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        state = lazyColumnListState
-                    ) {
-                        items(chatEntries) { chatEntry ->
-                            if (chatEntry.matchesSearch(searchQuery)) {
-                                SavedChatEntryItem(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .animateItemPlacement(),
-                                    chatEntry = chatEntry,
-                                    onDeleteClick = { onDelete(it) },
-                                    onCopy = {
-                                        clipboardManager.setText(buildAnnotatedString {
-                                            append(
-                                                it
-                                            )
+                    AnimatedVisibility(visible = chatEntries.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            state = lazyColumnListState
+                        ) {
+                            items(chatEntries) { chatEntry ->
+                                if (chatEntry.matchesSearch(searchQuery)) {
+                                    SavedChatEntryItem(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .animateItemPlacement(),
+                                        chatEntry = chatEntry,
+                                        onDeleteClick = { onDelete(it) },
+                                        onCopy = {
+                                            clipboardManager.setText(buildAnnotatedString {
+                                                append(
+                                                    it
+                                                )
+                                            })
                                         })
-                                    })
+                                }
                             }
                         }
                     }
