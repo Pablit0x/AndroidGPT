@@ -19,9 +19,4 @@ object Constants {
     const val BASE_URL = "https://api.openai.com/"
     const val CHAT_ROLE = "user"
     const val INVALID_API_KEY = "INVALID_KEY"
-
-    const val HOME_SCREEN = "home_screen"
-    const val SAVED_ENTRIES_SCREEN = "saved_entries_screen"
-    const val SETTINGS_SCREEN = "settings_screen"
-    const val PROMPTS_SCREEN = "prompts_screen"
 }
