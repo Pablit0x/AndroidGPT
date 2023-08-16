@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,8 +64,8 @@ import com.ps.androidgpt.presentation.navigation.Screen
 import kotlinx.coroutines.launch
 
 @OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class)
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
+)
 @Composable
 fun SavedChatsScreen(
     chatEntries: List<ChatEntry>?,
@@ -109,30 +110,35 @@ fun SavedChatsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.empty_saved),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        ElevatedButton(onClick = {
-                            navController.navigate(Screen.HomeScreen.route)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Chat,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
+                        if (chatEntries == null) {
+                            CircularProgressIndicator()
+                        } else {
+                            Text(
+                                text = stringResource(id = R.string.empty_saved),
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.outline
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(stringResource(id = R.string.open_chat))
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            ElevatedButton(onClick = {
+                                navController.navigate(Screen.HomeScreen.route)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Chat,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(stringResource(id = R.string.open_chat))
+                            }
                         }
                     }
                 } else {
                     AnimatedVisibility(visible = isSearchActive) {
-                        OutlinedTextField(value = searchQuery,
+                        OutlinedTextField(
+                            value = searchQuery,
                             onValueChange = { searchQuery = it },
                             placeholder = { Text(text = stringResource(id = R.string.search)) },
                             trailingIcon = {
