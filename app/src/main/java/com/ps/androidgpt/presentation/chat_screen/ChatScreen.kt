@@ -74,7 +74,6 @@ fun ChatScreen(
     navController: NavController,
     drawerState: DrawerState
 ) {
-
     var chatQuery by rememberSaveable {
         mutableStateOf("")
     }
@@ -153,14 +152,16 @@ fun ChatScreen(
                     ) {
                         items(state.chatEntries) { chatEntry ->
                             Column(modifier = Modifier.fillMaxWidth()) {
-                                ChatEntryItem(modifier = Modifier.fillMaxWidth(),
+                                var showSaveOption by remember { mutableStateOf(true) }
+                                ChatEntryItem(
+                                    modifier = Modifier.fillMaxWidth(),
                                     chatEntry = chatEntry,
                                     onCopyClick = {
                                         clipboardManager.setText(buildAnnotatedString { append(it) })
                                     },
                                     onSaveClick = { entry ->
                                         val chatEntryEntity = onSaveEntry(entry)
-
+                                        showSaveOption = false
                                         scope.launch {
                                             when (snackBarState.showSnackbar(
                                                 message = context.getString(
@@ -169,13 +170,16 @@ fun ChatScreen(
                                             )) {
                                                 SnackbarResult.ActionPerformed -> {
                                                     onDeleteEntry(chatEntryEntity.id.toHexString())
+                                                    showSaveOption = true
                                                 }
 
                                                 SnackbarResult.Dismissed -> {
                                                 }
                                             }
                                         }
-                                    })
+                                    },
+                                    showSaveOption = showSaveOption
+                                )
                             }
                         }
 

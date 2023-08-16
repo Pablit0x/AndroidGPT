@@ -1,5 +1,6 @@
 package com.ps.androidgpt.presentation.composables
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,7 +34,8 @@ fun ChatEntryItem(
     chatEntry: ChatEntry,
     onCopyClick: (String) -> Unit,
     onSaveClick: (ChatEntry) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showSaveOption: Boolean = true
 ) {
     Column(
         modifier = modifier
@@ -93,14 +95,16 @@ fun ChatEntryItem(
                 )
             }
 
-            IconButton(onClick = {
-                onSaveClick(chatEntry)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Save,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+            AnimatedVisibility(visible = showSaveOption) {
+                IconButton(onClick = {
+                    onSaveClick(chatEntry)
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.BookmarkAdd,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
         }
     }
