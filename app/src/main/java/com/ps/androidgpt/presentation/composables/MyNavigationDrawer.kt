@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Adjust
-import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ps.androidgpt.R
 import com.ps.androidgpt.presentation.navigation.Screen
+import com.ps.androidgpt.utils.Constants
 
 data class DrawerMenuItem(
     val id: Int,
@@ -45,7 +45,7 @@ fun MyNavigationDrawer(
             stringResource(id = R.string.home),
             stringResource(id = R.string.navigate_home),
             onClickAction = {
-                onItemClick(Screen.HomeScreen.route)
+                onItemClick("${Screen.HomeScreen.route}/{${Constants.PROMPT_NAVIGATION_ARGUMENT}}")
             }), DrawerMenuItem(
             Screen.SavedEntriesScreen.id,
             Icons.Filled.Bookmark,

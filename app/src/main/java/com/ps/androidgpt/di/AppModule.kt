@@ -5,11 +5,15 @@ import com.ps.androidgpt.data.local.entity.PromptEntity
 import com.ps.androidgpt.data.remote.ChatApi
 import com.ps.androidgpt.data.repository.ChatRepositoryImpl
 import com.ps.androidgpt.data.repository.PromptRepositoryImpl
+import com.ps.androidgpt.domain.model.PromptEntry
+import com.ps.androidgpt.domain.model.toPromptEntity
 import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.domain.repository.PromptRepository
 import com.ps.androidgpt.domain.use_case.delete_entry.DeleteEntryUseCase
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.get_saved_entries.GetSavedEntriesUseCase
+import com.ps.androidgpt.domain.use_case.get_saved_prompts.GetSavedPromptsUseCase
+import com.ps.androidgpt.domain.use_case.insert_prompt.InsertPromptUseCase
 import com.ps.androidgpt.domain.use_case.save_entry.InsertChatEntryUseCase
 import com.ps.androidgpt.utils.Constants
 import dagger.Module
@@ -29,9 +33,18 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRealm(): Realm {
+
         val realmConfig = RealmConfiguration.Builder(
             schema = setOf(ChatEntryEntity::class, PromptEntity::class)
-        ).compactOnLaunch().build()
+        ).initialData {
+            copyToRealm(PromptEntry(prompt = "Tell me a joke.").toPromptEntity())
+            copyToRealm(PromptEntry(prompt = "Provide me with an intriguing fact about an animal.").toPromptEntity())
+            copyToRealm(PromptEntry(prompt = "Explain the concept of cloud computing.").toPromptEntity())
+            copyToRealm(PromptEntry(prompt = "Explain the process of photosynthesis in plants.").toPromptEntity())
+            copyToRealm(PromptEntry(prompt = "List three benefits of regular exercise.").toPromptEntity())
+            copyToRealm(PromptEntry(prompt = "Suggest three quick and healthy breakfast ideas.").toPromptEntity())
+            copyToRealm(PromptEntry(prompt = "Name three famous landmarks in Paris.").toPromptEntity())
+        }.compactOnLaunch().build()
         return Realm.open(configuration = realmConfig)
     }
 
@@ -79,4 +92,15 @@ object AppModule {
     }
 
 
+    @Provides
+    @Singleton
+    fun provideGetSavedPromptsUseCase(promptRepository: PromptRepository): GetSavedPromptsUseCase {
+        return GetSavedPromptsUseCase(promptRepository = promptRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInsertPromptUseCase(promptRepository: PromptRepository): InsertPromptUseCase {
+        return InsertPromptUseCase(promptRepository = promptRepository)
+    }
 }

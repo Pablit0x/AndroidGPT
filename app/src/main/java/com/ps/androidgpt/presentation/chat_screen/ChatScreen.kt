@@ -68,6 +68,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ChatScreen(
     state: ChatState,
+    prompt: String?,
     onSendRequest: (UserSettings, String) -> Unit,
     onSaveEntry: (ChatEntry) -> ChatEntryEntity,
     onDeleteEntry: (String) -> Unit,
@@ -75,7 +76,7 @@ fun ChatScreen(
     drawerState: DrawerState
 ) {
     var chatQuery by rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf(prompt ?: "")
     }
 
     val clipboardManager = LocalClipboardManager.current

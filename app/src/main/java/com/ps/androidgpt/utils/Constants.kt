@@ -15,6 +15,8 @@ object Constants {
 
     const val USER_SETTINGS_FILE = "user_settings.json"
 
+    const val PROMPT_NAVIGATION_ARGUMENT = "prompt"
+
     const val DEFAULT_MODEL_ID = "gpt-3.5-turbo"
     const val BASE_URL = "https://api.openai.com/"
     const val CHAT_ROLE = "user"
