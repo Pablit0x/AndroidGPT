@@ -45,7 +45,7 @@ fun MyNavigationDrawer(
             stringResource(id = R.string.home),
             stringResource(id = R.string.navigate_home),
             onClickAction = {
-                onItemClick("${Screen.HomeScreen.route}/{${Constants.PROMPT_NAVIGATION_ARGUMENT}}")
+                onItemClick("${Screen.HomeScreen.route}/ ")
             }), DrawerMenuItem(
             Screen.SavedEntriesScreen.id,
             Icons.Filled.Bookmark,

@@ -53,9 +53,10 @@ fun NavGraph() {
             val state by chatViewModel.state.collectAsStateWithLifecycle()
             val prompt = entry.arguments?.getString(Constants.PROMPT_NAVIGATION_ARGUMENT)
 
+
             ChatScreen(
                 state = state,
-                prompt = prompt,
+                prompt = if (prompt.isNullOrBlank()) "" else prompt,
                 onSendRequest = chatViewModel::getChatResponse,
                 onSaveEntry = chatViewModel::insertChatEntry,
                 onDeleteEntry = chatViewModel::deleteEntry,
