@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,27 +34,23 @@ import com.ps.androidgpt.presentation.composables.gradientSurface
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpsertPromptScreen(
+fun InsertPromptScreen(
     navController: NavController,
-    title: String,
-    prompt: String?,
     onInsert: (promptEntry: PromptEntry) -> Unit,
-    onUpdate: (promptEntry: PromptEntry) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var updatedPrompt by remember {
-        mutableStateOf(prompt)
+        mutableStateOf("")
     }
-
-    val context = LocalContext.current
-
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.background
         ), title = {
             Text(
-                text = title, fontSize = 24.sp, fontWeight = FontWeight.Bold
+                text = stringResource(id = R.string.add_prompt_title),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
             )
         }, navigationIcon = {
             IconButton(onClick = {
@@ -67,11 +62,7 @@ fun UpsertPromptScreen(
             }
         }, actions = {
             IconButton(onClick = {
-                if (title == context.getString(R.string.add_prompt_title)) updatedPrompt?.let {
-                    onInsert(PromptEntry(prompt = it))
-                } else updatedPrompt?.let {
-                    onUpdate(PromptEntry(prompt = it))
-                }
+                updatedPrompt?.let { onInsert(PromptEntry(prompt = it)) }
                 navController.popBackStack()
             }, modifier = Modifier.padding(end = 16.dp)) {
                 Icon(
@@ -91,11 +82,10 @@ fun UpsertPromptScreen(
                 onValueChange = {
                     updatedPrompt = it
                 },
-                label = { Text(text = stringResource(id = R.string.prompt)) },
+                placeholder = { Text(text = stringResource(id = R.string.enter_prompt)) },
                 minLines = 6,
                 modifier = modifier
-                    .fillMaxWidth()
-                    .fillMaxSize(0.5f)
+                    .fillMaxSize()
                     .padding(16.dp)
                     .gradientSurface()
             )

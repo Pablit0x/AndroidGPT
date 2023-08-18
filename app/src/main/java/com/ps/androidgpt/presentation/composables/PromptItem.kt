@@ -17,9 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -47,7 +45,7 @@ import com.ps.androidgpt.R
 
 @Composable
 fun PromptItem(
-    prompt: String, onSelect: () -> Unit, onRemove: () -> Unit, onEdit: () -> Unit
+    prompt: String, onSelect: () -> Unit, onRemove: () -> Unit
 ) {
 
     var isContextMenuVisible by rememberSaveable {
@@ -125,24 +123,6 @@ fun PromptItem(
                 y = pressOffset.y - itemHeight
             ),
         ) {
-            DropdownMenuItem(text = {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(id = R.string.edit_prompt))
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.surfaceTint
-                    )
-                }
-            }, onClick = {
-                isContextMenuVisible = false
-                onEdit()
-            })
-            Divider()
             DropdownMenuItem(text = {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

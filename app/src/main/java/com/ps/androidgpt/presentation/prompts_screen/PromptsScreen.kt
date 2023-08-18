@@ -31,9 +31,7 @@ import com.ps.androidgpt.presentation.navigation.Screen
 @Composable
 fun PromptsScreen(
     prompts: List<PromptEntry>?,
-    onInsertPrompt: (PromptEntry) -> Unit,
     onDeletePrompt: (String) -> Unit,
-    onEditPrompt: (PromptEntry) -> Unit,
     navController: NavController,
     drawerState: DrawerState
 ) {
@@ -53,7 +51,7 @@ fun PromptsScreen(
             )
         }, floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(Screen.UpsertPromptScreen.route + "/ ")
+                navController.navigate(Screen.UpsertPromptScreen.route)
             }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
@@ -67,8 +65,6 @@ fun PromptsScreen(
                     items(prompts) {
                         PromptItem(prompt = it.prompt, onSelect = {
                             navController.navigate("${Screen.HomeScreen.route}/${it.prompt}")
-                        }, onEdit = {
-                            navController.navigate("${Screen.UpsertPromptScreen.route}/${it.prompt}")
                         }, onRemove = {
                             it.id?.let(onDeletePrompt)
                         })

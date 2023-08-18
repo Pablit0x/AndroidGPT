@@ -9,5 +9,4 @@ interface PromptRepository {
     fun getSavedPrompts(): Flow<List<PromptEntity>>
     suspend fun insertPrompt(promptEntity: PromptEntity)
     suspend fun deletePrompt(id: ObjectId)
-    suspend fun updatePrompt(promptEntity: PromptEntity)
 }

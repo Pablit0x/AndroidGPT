@@ -34,11 +34,4 @@ class PromptRepositoryImpl @Inject constructor(
             }
         }
     }
-
-    override suspend fun updatePrompt(promptEntity: PromptEntity) {
-        realm.write {
-            val prompt = query<PromptEntity>(query = "id == $0", promptEntity.id).first().find()
-            prompt?.prompt = promptEntity.prompt
-        }
-    }
 }
