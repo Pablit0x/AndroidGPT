@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_android_gpt_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidGPT"
-        tools:targetApi="31">
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -10,6 +10,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
@@ -17,6 +18,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.ps.androidgpt.R
 import com.ps.androidgpt.presentation.chat_screen.ChatScreen
 import com.ps.androidgpt.presentation.chat_screen.ChatViewModel
 import com.ps.androidgpt.presentation.prompts_screen.PromptViewModel
@@ -24,6 +26,8 @@ import com.ps.androidgpt.presentation.prompts_screen.PromptsScreen
 import com.ps.androidgpt.presentation.saved_chats_screen.SavedChatsScreen
 import com.ps.androidgpt.presentation.saved_chats_screen.SavedResponsesViewModel
 import com.ps.androidgpt.presentation.settings_screen.SettingScreen
+import com.ps.androidgpt.presentation.upsert_prompt_screen.UpsertPromptScreen
+import com.ps.androidgpt.presentation.upsert_prompt_screen.UpsertPromptViewModel
 import com.ps.androidgpt.utils.Constants
 
 @Composable
@@ -91,9 +95,34 @@ fun NavGraph() {
             PromptsScreen(
                 prompts = prompts,
                 onInsertPrompt = promptViewModel::insertPrompt,
+                onDeletePrompt = promptViewModel::deletePrompt,
+                onEditPrompt = promptViewModel::editPrompt,
                 navController = navController,
                 drawerState = drawerState
             )
+        }
+
+        composable(
+            route = "${Screen.UpsertPromptScreen.route}/{${Constants.UPSERT_PROMPT_NAVIGATION_ARGUMENT}}",
+            arguments = listOf(navArgument(
+                Constants.UPSERT_PROMPT_NAVIGATION_ARGUMENT
+            ) {
+                type = NavType.StringType
+            })
+        ) { entry ->
+            val upsertPromptViewModel = hiltViewModel<UpsertPromptViewModel>()
+            val prompt = entry.arguments?.getString(Constants.UPSERT_PROMPT_NAVIGATION_ARGUMENT)
+
+            UpsertPromptScreen(
+                navController = navController,
+                title = if (prompt.isNullOrBlank()) stringResource(id = R.string.add_prompt_title) else stringResource(
+                    id = R.string.edit_prompt
+                ),
+                prompt = prompt,
+                onInsert = upsertPromptViewModel::insertPrompt,
+                onUpdate = upsertPromptViewModel::editPrompt
+            )
+
         }
     }
 }

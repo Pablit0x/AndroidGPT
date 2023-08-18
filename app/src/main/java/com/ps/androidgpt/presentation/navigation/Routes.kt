@@ -5,4 +5,5 @@ object Routes {
     const val SAVED_ENTRIES_SCREEN = "saved_entries_screen"
     const val SETTINGS_SCREEN = "settings_screen"
     const val PROMPTS_SCREEN = "prompts_screen"
+    const val UPSERT_PROMPT_SCREEN = "upsert_prompt_screen"
 }

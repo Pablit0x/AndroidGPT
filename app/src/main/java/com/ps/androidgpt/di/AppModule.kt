@@ -10,6 +10,8 @@ import com.ps.androidgpt.domain.model.toPromptEntity
 import com.ps.androidgpt.domain.repository.ChatRepository
 import com.ps.androidgpt.domain.repository.PromptRepository
 import com.ps.androidgpt.domain.use_case.delete_entry.DeleteEntryUseCase
+import com.ps.androidgpt.domain.use_case.delete_prompt.DeletePromptUseCase
+import com.ps.androidgpt.domain.use_case.edit_prompt.EditPromptUseCase
 import com.ps.androidgpt.domain.use_case.get_response.GetResponseUseCase
 import com.ps.androidgpt.domain.use_case.get_saved_entries.GetSavedEntriesUseCase
 import com.ps.androidgpt.domain.use_case.get_saved_prompts.GetSavedPromptsUseCase
@@ -102,5 +104,18 @@ object AppModule {
     @Singleton
     fun provideInsertPromptUseCase(promptRepository: PromptRepository): InsertPromptUseCase {
         return InsertPromptUseCase(promptRepository = promptRepository)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideDeletePromptUseCase(promptRepository: PromptRepository): DeletePromptUseCase {
+        return DeletePromptUseCase(promptRepository = promptRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEditPromptUseCase(promptRepository: PromptRepository): EditPromptUseCase {
+        return EditPromptUseCase(promptRepository = promptRepository)
     }
 }
