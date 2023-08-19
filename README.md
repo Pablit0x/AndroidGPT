@@ -1,4 +1,4 @@
-# AndroidGPT - ChatGPT Android App
+[AndroidGpt](https://github.com/Pablit0x/AndroidGPT/assets/76017191/9014b4d8-d7a2-489e-b3cc-29e6daf0a053) # AndroidGPT - ChatGPT Android App
 
 **AndroidGPT** is an Android application that brings the capabilities of OpenAI's ChatGPT API to your fingertips.
 
