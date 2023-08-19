@@ -97,7 +97,7 @@ fun ChatScreen(
     }
 
     LaunchedEffect(state) {
-        lazyColumnListState.animateScrollBy(1000f)
+        lazyColumnListState.animateScrollBy(10000f)
     }
 
     LaunchedEffect(state.error) {

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ps.androidgpt.domain.use_case.delete_prompt.DeletePromptUseCase
 import com.ps.androidgpt.domain.use_case.get_saved_prompts.GetSavedPromptsUseCase
-import com.ps.androidgpt.domain.use_case.insert_prompt.InsertPromptUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

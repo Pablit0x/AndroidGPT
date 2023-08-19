@@ -114,7 +114,7 @@ fun SavedChatsScreen(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             ElevatedButton(onClick = {
-                                navController.navigate(Screen.HomeScreen.route)
+                                navController.navigate("${Screen.HomeScreen.route}/ ")
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Chat,

@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 import java.util.Properties
 
 plugins {
@@ -16,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ps.androidgpt"
-        minSdk = 34
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -92,18 +91,14 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:2.6.0")
     implementation ("com.google.accompanist:accompanist-navigation-animation:0.27.0")
 
-
     // Dagger-Hilt
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation ("com.google.dagger:hilt-android:2.44.2")
     kapt ("com.google.dagger:hilt-android-compiler:2.44")
     kapt ("androidx.hilt:hilt-compiler:1.0.0")
 
-
     // Lifecycle aware flow
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-alpha01")
-
-
 
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

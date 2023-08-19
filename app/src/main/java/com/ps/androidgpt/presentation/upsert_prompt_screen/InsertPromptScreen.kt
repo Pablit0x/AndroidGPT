@@ -22,7 +22,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,7 +37,7 @@ import com.ps.androidgpt.R
 import com.ps.androidgpt.domain.model.PromptEntry
 import com.ps.androidgpt.presentation.composables.gradientSurface
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun InsertPromptScreen(
     navController: NavController,
@@ -43,18 +48,23 @@ fun InsertPromptScreen(
         mutableStateOf("")
     }
 
+    val focusRequester = remember { FocusRequester() }
+
+    val softKeyboard = LocalSoftwareKeyboardController.current
+
     Scaffold(topBar = {
-        CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ), title = {
-            Text(
-                text = stringResource(id = R.string.add_prompt_title),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }, navigationIcon = {
-            IconButton(onClick = {
-                navController.popBackStack()
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background
+            ), title = {
+                Text(
+                    text = stringResource(id = R.string.add_prompt_title),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }, navigationIcon = {
+                IconButton(onClick = {
+                    navController.popBackStack()
             }, modifier = Modifier.padding(start = 16.dp)) {
                 Icon(
                     imageVector = Icons.Default.Close, contentDescription = null
@@ -62,7 +72,7 @@ fun InsertPromptScreen(
             }
         }, actions = {
             IconButton(onClick = {
-                updatedPrompt?.let { onInsert(PromptEntry(prompt = it)) }
+                updatedPrompt.let { onInsert(PromptEntry(prompt = it)) }
                 navController.popBackStack()
             }, modifier = Modifier.padding(end = 16.dp)) {
                 Icon(
@@ -88,6 +98,11 @@ fun InsertPromptScreen(
                     .fillMaxSize()
                     .padding(16.dp)
                     .gradientSurface()
+                    .focusRequester(focusRequester)
+                    .onGloballyPositioned {
+                        focusRequester.requestFocus()
+                        softKeyboard?.show()
+                    }
             )
         }
     }
