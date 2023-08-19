@@ -2,6 +2,9 @@
 
 **AndroidGPT** is an Android application that brings the capabilities of OpenAI's ChatGPT API to your fingertips.
 
+## Video Demo
+https://github.com/Pablit0x/AndroidGPT/assets/76017191/cc334712-ed99-42d0-a906-fe2e52c0d834
+
 ## Features
 
 - **Interactive Conversations**: Engage in lifelike text-based conversations powered by the ChatGPT API, delivering adaptive responses.
