@@ -65,21 +65,21 @@ fun InsertPromptScreen(
             }, navigationIcon = {
                 IconButton(onClick = {
                     navController.popBackStack()
-            }, modifier = Modifier.padding(start = 16.dp)) {
-                Icon(
-                    imageVector = Icons.Default.Close, contentDescription = null
-                )
-            }
-        }, actions = {
-            IconButton(onClick = {
-                updatedPrompt.let { onInsert(PromptEntry(prompt = it)) }
-                navController.popBackStack()
-            }, modifier = Modifier.padding(end = 16.dp)) {
-                Icon(
-                    imageVector = Icons.Default.Check, contentDescription = null
-                )
-            }
-        })
+                }, modifier = Modifier.padding(start = 16.dp)) {
+                    Icon(
+                        imageVector = Icons.Default.Close, contentDescription = null
+                    )
+                }
+            }, actions = {
+                IconButton(onClick = {
+                    updatedPrompt.let { onInsert(PromptEntry(prompt = it)) }
+                    navController.popBackStack()
+                }, modifier = Modifier.padding(end = 16.dp)) {
+                    Icon(
+                        imageVector = Icons.Default.Check, contentDescription = null
+                    )
+                }
+            })
     }) { padding ->
         Column(
             modifier = modifier

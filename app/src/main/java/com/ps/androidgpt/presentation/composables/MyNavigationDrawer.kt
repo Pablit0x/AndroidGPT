@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ps.androidgpt.R
 import com.ps.androidgpt.presentation.navigation.Screen
-import com.ps.androidgpt.utils.Constants
 
 data class DrawerMenuItem(
     val id: Int,
